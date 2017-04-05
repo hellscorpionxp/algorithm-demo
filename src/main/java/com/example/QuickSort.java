@@ -8,36 +8,65 @@ public class QuickSort<T extends Comparable<? super T>> {
         this.array = array;
     }
 
-    public void sort() {
-        sort(0, array.length - 1);
+    public void sort1() {
+        sort1(0, array.length - 1);
     }
 
-    private void sort(int left, int right) {
+    private void sort1(int left, int right) {
         int l = left;
         int r = right;
-        T m = array[(left + right) / 2];
+        int pivot = left;
+        T tmp = array[left];
+        while (l <= r) {
+            while (r >= pivot && array[r].compareTo(tmp) >= 0) {
+                r--;
+            }
+            if (r >= pivot) {
+                array[pivot] = array[r];
+                pivot = r;
+            }
+            while (l <= pivot && array[l].compareTo(tmp) <= 0) {
+                l++;
+            }
+            if (l <= pivot) {
+                array[pivot] = array[l];
+                pivot = l;
+            }
+        }
+        array[pivot] = tmp;
+
+        if (left < pivot) {
+            sort1(left, pivot - 1);
+        }
+        if (right > pivot) {
+            sort1(pivot + 1, right);
+        }
+    }
+
+    public void sort2() {
+        sort2(0, array.length - 1);
+    }
+
+    private void sort2(int left, int right) {
+        int l = left - 1;
+        int r = right;
+        T pivot = array[right];
         while (l < r) {
-            while (array[l].compareTo(m) < 0) {
-                ++l;
-            }
-            while (array[r].compareTo(m) > 0) {
-                --r;
-            }
+            while (l < r && array[++l].compareTo(pivot) < 0)
+                ;
+            while (l < r && array[--r].compareTo(pivot) > 0)
+                ;
             if (l < r) {
                 swap(l, r);
-                ++l;
-                --r;
             }
         }
-        if (l == r) {
-            l++;
-        }
+        swap(l, right);
 
-        if (left < r) {
-            sort(left, l - 1);
+        if (left < l) {
+            sort2(left, l - 1);
         }
         if (right > l) {
-            sort(r + 1, right);
+            sort2(l + 1, right);
         }
     }
 
